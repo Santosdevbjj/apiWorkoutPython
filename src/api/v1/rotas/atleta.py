@@ -15,4 +15,25 @@ async def consultar_atletas(
     # Lógica para construir a query com base nos filtros (nome e cpf)
     # ...
     # Retorna o resultado paginado
-    # return paginate(query, params)
+    # return paginate(query, params) 
+
+
+    
+
+from sqlalchemy.exc import IntegrityError
+from fastapi import HTTPException, status
+
+# ... código da rota POST ...
+
+    try:
+        # Lógica para persistir o Atleta no banco de dados
+        await db_session.commit()
+    except IntegrityError:
+        # Lógica para tratar o erro de CPF duplicado
+        raise HTTPException(
+            status_code=status.HTTP_303_SEE_OTHER, # 303 See Other
+            detail=f'Já existe um atleta cadastrado com o cpf: {atleta_in.cpf}'
+        )
+    except Exception:
+        
+
