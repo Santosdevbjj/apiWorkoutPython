@@ -9,7 +9,7 @@ export $(shell sed 's/=.*//' .env)
 # Nome do serviço da aplicação definido em .env
 APP_SERVICE := $(DOCKER_APP_SERVICE)
 PYTHON := python
-
+ 
 # =========================
 # 🐳 COMANDOS DOCKER
 # =========================
