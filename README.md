@@ -55,7 +55,7 @@
 
  🖥️ **Requisitos de Hardware e Software**
 
- **Hardware (mínimo recomendado)**
+   **Hardware (mínimo recomendado)**
 - CPU Dual-Core (2 GHz+)
 - 4 GB de RAM
 - 500 MB de espaço em disco para o projeto e dependências
