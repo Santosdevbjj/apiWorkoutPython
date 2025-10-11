@@ -1,0 +1,281 @@
+{
+  "info": {
+    "name": "API Workout Python",
+    "_postman_id": "9a5f4b9d-2e4d-4b8c-92c4-9b7f6f202510",
+    "description": "Coleção Postman para testar a API Workout Python (Atletas, Categorias e Centros de Treinamento).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Atletas",
+      "item": [
+        {
+          "name": "Criar Atleta",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"João Silva\",\n  \"idade\": 25,\n  \"categoria_id\": 1,\n  \"centro_treinamento_id\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/atletas/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "atletas", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Atletas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/v1/atletas/?page=1&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "atletas", ""],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obter Atleta por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/v1/atletas/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "atletas", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Atleta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"João Souza\",\n  \"idade\": 26\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/atletas/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "atletas", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Atleta",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:8000/api/v1/atletas/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "atletas", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categorias",
+      "item": [
+        {
+          "name": "Criar Categoria",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Peso Leve\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/categorias/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "categorias", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Categorias",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/v1/categorias/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "categorias", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obter Categoria por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/v1/categorias/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "categorias", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Categoria",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Peso Médio\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/categorias/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "categorias", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Categoria",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:8000/api/v1/categorias/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "categorias", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Centros de Treinamento",
+      "item": [
+        {
+          "name": "Criar Centro",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"CT Gracie Barra\",\n  \"endereco\": \"Rua dos Lutadores, 123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/centros/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "centros", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Centros",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/v1/centros/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "centros", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obter Centro por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/v1/centros/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "centros", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Centro",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"CT Alliance\",\n  \"endereco\": \"Av. Central, 456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/centros/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "centros", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Centro",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:8000/api/v1/centros/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "centros", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
