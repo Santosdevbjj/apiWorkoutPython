@@ -1,131 +1,145 @@
-# ============================================
-# 🏋️‍♂️ API Workout Python - Makefile
-# ============================================
+# ==========================
+# 📌 Variáveis Globais
+# ==========================
+DOCKER_COMPOSE := docker-compose
+DOCKER_COMPOSE_PROD := docker-compose -f docker-compose.yml -f docker-compose.prod.yml
+PYTHON := python3
+APP_SERVICE := app
+DB_SERVICE := db
 
-# Carrega variáveis do arquivo .env
-include .env
-export $(shell sed 's/=.*//' .env)
+# ==========================
+# 🧪 Desenvolvimento
+# ==========================
 
-# Nome do serviço da aplicação definido em .env
-APP_SERVICE := $(DOCKER_APP_SERVICE)
-PYTHON := python
- 
-# =========================
-# 🐳 COMANDOS DOCKER
-# =========================
+## Subir o ambiente de desenvolvimento com reload
+dev-up:
+	@echo "🚀 Subindo ambiente de desenvolvimento..."
+	$(DOCKER_COMPOSE) up --build
 
-## 🟢 Subir os containers da aplicação (modo dev)
-up:
-	docker-compose up -d
+## Derrubar o ambiente de desenvolvimento
+dev-down:
+	@echo "🛑 Derrubando ambiente de desenvolvimento..."
+	$(DOCKER_COMPOSE) down
 
-## 🛑 Parar e remover os containers
-down:
-	docker-compose down
+## Restart do ambiente de desenvolvimento
+dev-restart: dev-down dev-up
 
-## 🔄 Subir e recompilar a imagem
-build:
-	docker-compose up -d --build
+## Acessar o container do app em modo interativo
+dev-shell:
+	$(DOCKER_COMPOSE) exec $(APP_SERVICE) bash
 
-## 🔍 Ver logs da aplicação
-logs:
-	docker-compose logs -f $(APP_SERVICE)
+## Instalar dependências dentro do container de desenvolvimento
+dev-install:
+	$(DOCKER_COMPOSE) exec $(APP_SERVICE) pip install -r requirements.txt
 
-## 🧹 Remover volumes e cache (cuidado!)
+# ==========================
+# 🏭 Produção
+# ==========================
+
+## Subir o ambiente de produção com Gunicorn
+prod-up:
+	@echo "🚀 Subindo ambiente de produção..."
+	$(DOCKER_COMPOSE_PROD) up -d --build
+
+## Derrubar o ambiente de produção
+prod-down:
+	@echo "🛑 Derrubando ambiente de produção..."
+	$(DOCKER_COMPOSE_PROD) down
+
+## Restart da aplicação em produção
+prod-restart: prod-down prod-up
+
+## Ver logs em produção
+prod-logs:
+	$(DOCKER_COMPOSE_PROD) logs -f $(APP_SERVICE)
+
+## Acessar shell do app em produção
+prod-shell:
+	$(DOCKER_COMPOSE_PROD) exec $(APP_SERVICE) bash
+
+# ==========================
+# 🗃️ Banco de Dados / Alembic
+# ==========================
+
+## Criar nova migration Alembic
+migrate-create:
+	@if [ -z "$(d)" ]; then \
+		echo "❌ ERRO: Informe o nome da migration com d=\"nome\""; \
+		exit 1; \
+	fi
+	$(DOCKER_COMPOSE) exec $(APP_SERVICE) alembic revision --autogenerate -m "$(d)"
+
+## Aplicar migrations
+migrate-up:
+	$(DOCKER_COMPOSE) exec $(APP_SERVICE) alembic upgrade head
+
+## Desfazer última migration (downgrade)
+migrate-down:
+	$(DOCKER_COMPOSE) exec $(APP_SERVICE) alembic downgrade -1
+
+## Ver histórico de migrations
+migrate-history:
+	$(DOCKER_COMPOSE) exec $(APP_SERVICE) alembic history
+
+# ==========================
+# 🧪 Testes e Qualidade
+# ==========================
+
+## Rodar testes com Pytest no container
+test:
+	@echo "🧪 Executando testes..."
+	$(DOCKER_COMPOSE) exec $(APP_SERVICE) pytest -v
+
+## Rodar lint com flake8
+lint:
+	@echo "🔍 Rodando flake8..."
+	$(DOCKER_COMPOSE) exec $(APP_SERVICE) flake8 app
+
+## Rodar formatação com black
+format:
+	@echo "✨ Formatando código com Black..."
+	$(DOCKER_COMPOSE) exec $(APP_SERVICE) black app tests
+
+## Rodar isort para ordenar imports
+imports:
+	@echo "📚 Organizando imports com isort..."
+	$(DOCKER_COMPOSE) exec $(APP_SERVICE) isort app tests
+
+# ==========================
+# 🚀 Deploy / CI
+# ==========================
+
+## Simular pipeline de deploy (testes + lint + build)
+deploy-check:
+	@echo "🏗️ Verificando código antes do deploy..."
+	make lint
+	make test
+
+## Deploy produção (build + migração + restart)
+deploy:
+	@echo "🚀 Realizando deploy..."
+	make prod-up
+	$(DOCKER_COMPOSE_PROD) exec $(APP_SERVICE) alembic upgrade head
+
+# ==========================
+# 🧹 Limpeza
+# ==========================
+
+## Remover containers, volumes e imagens não utilizadas
 clean:
-	docker-compose down -v --remove-orphans
+	@echo "🧹 Limpando containers e volumes..."
+	$(DOCKER_COMPOSE) down -v --remove-orphans
 	docker system prune -f
 
-# =========================
-# 🧰 AMBIENTE LOCAL
-# =========================
+## Recriar tudo do zero (dev)
+rebuild-dev: clean dev-up
 
-## 🐍 Instalar dependências no ambiente virtual local
-install:
-	$(PYTHON) -m venv venv
-	. venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
+## Recriar tudo do zero (prod)
+rebuild-prod: clean prod-up
 
-## 🚀 Rodar aplicação localmente (sem Docker)
-run:
-	uvicorn app.main:app --host $(APP_HOST) --port $(APP_PORT) --reload
-
-# =========================
-# 🧪 TESTES
-# =========================
-
-## 🧪 Rodar todos os testes com Pytest
-test:
-	docker-compose exec $(APP_SERVICE) pytest -v
-
-## 🧪 Testes com cobertura
-coverage:
-	docker-compose exec $(APP_SERVICE) pytest --cov=app --cov-report=term-missing
-
-# =========================
-# 🛢️ MIGRAÇÕES (ALEMBIC)
-# =========================
-
-## 📝 Criar uma nova migration: make migrate m="mensagem"
-migrate:
-ifndef m
-	$(error ❌ Você precisa passar a descrição da migration. Ex: make migrate m="create atleta table")
-endif
-	docker-compose exec $(APP_SERVICE) alembic revision --autogenerate -m "$(m)"
-
-## ⬆️ Aplicar migrations
-upgrade:
-	docker-compose exec $(APP_SERVICE) alembic upgrade head
-
-## ⬇️ Reverter última migration
-downgrade:
-	docker-compose exec $(APP_SERVICE) alembic downgrade -1
-
-# =========================
-# 🧼 FORMATAÇÃO / LINT
-# =========================
-
-## 🧼 Formatar código com Black e isort
-format:
-	docker-compose exec $(APP_SERVICE) black app tests
-	docker-compose exec $(APP_SERVICE) isort app tests
-
-## 🔍 Verificar lint (sem alterar arquivos)
-lint:
-	docker-compose exec $(APP_SERVICE) black --check app tests
-	docker-compose exec $(APP_SERVICE) isort --check-only app tests
-	docker-compose exec $(APP_SERVICE) flake8 app tests
-
-# =========================
-# 🧠 AJUDA
-# =========================
-
-## 📜 Exibir todos os comandos disponíveis
+# ==========================
+# 📝 Ajuda
+# ==========================
 help:
-	@echo "============================================"
-	@echo " 🏋️‍♂️ API Workout Python - Comandos Makefile"
-	@echo "============================================"
-	@echo "🐳 Docker:"
-	@echo "  make up              - Subir containers"
-	@echo "  make down            - Parar containers"
-	@echo "  make build           - Recompilar imagem e subir"
-	@echo "  make logs            - Acompanhar logs da aplicação"
-	@echo "  make clean           - Remover containers, volumes e cache"
-	@echo ""
-	@echo "🐍 Ambiente Local:"
-	@echo "  make install         - Instalar dependências no venv"
-	@echo "  make run             - Rodar API localmente (sem Docker)"
-	@echo ""
-	@echo "🧪 Testes:"
-	@echo "  make test            - Rodar testes com Pytest"
-	@echo "  make coverage        - Rodar testes com relatório de cobertura"
-	@echo ""
-	@echo "🛢️ Migrações Alembic:"
-	@echo "  make migrate m=\"msg\"  - Criar nova migration"
-	@echo "  make upgrade         - Aplicar migrations"
-	@echo "  make downgrade       - Reverter última migration"
-	@echo ""
-	@echo "🧼 Formatação e Lint:"
-	@echo "  make format          - Formatar código com black + isort"
-	@echo "  make lint            - Rodar linters e verificações"
-	@echo ""
-	@echo "🧠 Ajuda:"
-	@echo "  make help            - Exibir esta ajuda"
+	@echo "📚 Comandos disponíveis:"
+	@grep -E '^[a-zA-Z0-9_.-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2}'
