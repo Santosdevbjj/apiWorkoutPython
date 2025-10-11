@@ -1,1 +1,1 @@
-# Pasta vazia, ou com suas migrations geradas pelo Alembic.
+ Pasta vazia, ou com suas migrations geradas pelo Alembic.
