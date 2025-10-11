@@ -11,7 +11,7 @@
 ---
 
 
-# 🏋️‍♂️ API Workout Python
+ 🏋️‍♂️ **API Workout Python**
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-brightgreen?logo=fastapi)
@@ -25,7 +25,7 @@
 
 ---
 
-## 🧭 Índice
+ 🧭 **Índice**
 
 - [⚡ Tecnologias](#-tecnologias)
 - [🖥️ Requisitos de Hardware e Software](#️-requisitos-de-hardware-e-software)
@@ -40,7 +40,7 @@
 
 ---
 
-## ⚡ Tecnologias
+ ⚡ **Tecnologias**
 
 - **Linguagem:** Python 3.11+
 - **Framework:** FastAPI
@@ -53,14 +53,14 @@
 
 ---
 
-## 🖥️ Requisitos de Hardware e Software
+ 🖥️ **Requisitos de Hardware e Software**
 
-### Hardware (mínimo recomendado)
+ **Hardware (mínimo recomendado)**
 - CPU Dual-Core (2 GHz+)
 - 4 GB de RAM
 - 500 MB de espaço em disco para o projeto e dependências
 
-### Software
+  **Software**
 - [Python 3.11+](https://www.python.org/downloads/)
 - [PostgreSQL 15+](https://www.postgresql.org/)
 - [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) (opcional, para execução containerizada)
@@ -68,7 +68,7 @@
 
 ---
 
-## 📁 Estrutura de Pastas
+ 📁 **Estrutura de Pastas**
 
 <img width="838" height="1766" alt="Screenshot_20251011-191149" src="https://github.com/user-attachments/assets/a570aae9-8a25-4520-9aed-4a031f4b4afe" />
 
@@ -77,7 +77,7 @@
 
 ---
 
-## 🧰 Arquivos Importantes
+ 🧰 **Arquivos Importantes**
 
 | Arquivo | Função |
 |---------|--------|
@@ -96,9 +96,9 @@
 
 ---
 
-## 🚀 Como Rodar o Projeto
+ 🚀 **Como Rodar o Projeto**
 
-### 1️⃣ Clonar o repositório
+ 1️⃣ **Clonar o repositório**
 ```bash
 git clone https://github.com/Santosdevbjj/apiWorkoutPython.git
 cd apiWorkoutPython
